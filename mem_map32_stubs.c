@@ -22,13 +22,7 @@
 
 // #define DEBUG 1
 
-//(*
-//external read: int32 -> int32 = "caml_mem_map32_read"
-//external write: int32 -> int32 -> int32 = "caml_mem_map32_write"
-//external mmap: int32 -> int -> int32 = "caml_mem_map32_mem_map"
-//
 // fixme     int munmap(void *addr, size_t length);
-//*)
 
 #define handle_error(msg) do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
@@ -53,7 +47,6 @@ value caml_mem_map32_mmap(value addr, value len)
 // MAP_NORESERVE causes coredump
 //  void *virt_ptr = mmap(NULL, l + real_ptr - pa_ptr, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_NORESERVE | MAP_UNINITIALIZED, fd, pa_ptr);
 //  void *virt_ptr = mmap(NULL, l + real_ptr - pa_ptr, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_NORESERVE, fd, pa_ptr);
-// FIXME using MAP_SHARED causes coredump why?
   void *virt_ptr = mmap(NULL, l + real_ptr - pa_ptr, PROT_READ | PROT_WRITE, MAP_SHARED, fd, pa_ptr);
   if (virt_ptr == MAP_FAILED)
     handle_error("mmap");

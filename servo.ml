@@ -21,13 +21,13 @@ let make
       ?(zero_pulse_width = 1.5)  (* pulse width for center position *)
       ?(min_angle = (-2.))         (* minimum possible angle in radians taken when min_pulse_width is used *)
                                  (* use +1 for min_angle if servo is not limited to 360 degrees *)
-      ?(max_angle = 2.)         (* maximum possible angle in radians taken when max_pulse_width is applied *)
+      ?(max_angle = 2.)          (* maximum possible angle in radians taken when max_pulse_width is applied *)
       ()                         (* use -1 for max_angle if servo is not limited to 360 degrees *)
                                  (* standard servos should be at 0 degree with a pulse length of 1.5 ms,
                                     at plus 90 degree with 2ms pulses and at minus 90 with 1ms *)
   =
     let pin = Bcm2835.Pin.of_int pin in
-    let _ = Bcm2835.Pwm.init_pin pin in
+    let _ = Bcm2835.init_pin pin in
     let _ = Bcm2835.set_frequency pin frequency in
     { pin; frequency; speed; min_pulse_width; max_pulse_width; zero_pulse_width; min_angle; max_angle; }
 
@@ -74,71 +74,3 @@ let get_eta servo = raise (Not_implemented "get_eta")
 let tell_position angle = raise (Not_implemented "tell_position")
   (* tell the servo where it is to train/calibrate the servo to make better estimates about position, speed and eta *)
 
-
-let test =
-  let servo_top    = make 12 () in
-  let servo_bottom = make 13 () in
-  begin
-    let div = Bcm2835.Clock.get_divisor () in
-    print_string ("got clock divisor: " ^ (string_of_int div) ^ "\n");
-    print_string ("center top servo and move it\n");
-    let range0 = Bcm2835.Pwm.get_pwm_range servo_top.pin in
-    print_string ("got range0: " ^ (string_of_int range0) ^ "\n");
-    let freq = Bcm2835.get_frequency servo_top.pin in
-    print_string ("got frequency[Hz] for top servo: " ^ (string_of_int freq) ^ "\n");
-    let range1 = Bcm2835.Pwm.get_pwm_range servo_bottom.pin in
-    print_string ("got range1: " ^ (string_of_int range1) ^ "\n");
-
-    goto servo_top 0.;
-    let pulse_width = Bcm2835.get_pulse_width servo_top.pin in
-    print_string ("got pulse width[ms] for center position: " ^ (string_of_float pulse_width) ^ "\n");
-    Time.delay_microseconds(500000);
-    goto servo_top (-1.);
-    let pulse_width = Bcm2835.get_pulse_width servo_top.pin in
-    print_string ("got pulse width[ms] for -1 position: " ^ (string_of_float pulse_width) ^ "\n");
-    Time.delay_microseconds(500000);
-    goto servo_top 1.;
-    let pulse_width = Bcm2835.get_pulse_width servo_top.pin in
-    print_string ("got pulse width[ms] for 1 position: " ^ (string_of_float pulse_width) ^ "\n");
-    Time.delay_microseconds(500000);
-    goto_relative servo_top (-1.);
-
-    goto servo_bottom 0.;
-    Time.delay_microseconds(500000);
-    goto servo_bottom (-1.);
-    Time.delay_microseconds(500000);
-    goto servo_bottom 1.;
-    Time.delay_microseconds(500000);
-    goto_relative servo_bottom (-1.);
-
-    (* play around with pwm *)
-(*
-    for k = 0 to 10 do (
-      for i = 0 to 1 do (
-        let pos = 0.2 *. float_of_int (2 * i - 1) in
-        goto servo_top pos;
-        Time.delay_microseconds(40000);
-        for j = 0 to 1 do (
-          let pos = 0.5 *. float_of_int (2 * j - 1) in
-          goto servo_bottom pos;
-          Time.delay_microseconds(40000);
-        ) done;
-      ) done;
-    ) done;
-*)
-
-    goto servo_top 0.;
-    goto servo_bottom 0.;
-
-    (* try to make laser go in a circle *)
-    let range = 800 in
-    let pulse = 20000 in
-    let delay = 2 * pulse in
-    for i = 0 to range do (
-      let pos_x = 0.35 *. (cos (0.4 *. (float_of_int i))) in
-      let pos_y = 0.2 *. (sin (0.4 *. (float_of_int i))) in
-      goto servo_top pos_x;
-      goto servo_bottom pos_y;
-      Time.delay_microseconds(delay);
-    ) done;
-  end

@@ -13,9 +13,9 @@ module Pin :
     val set_mode_to_pwm : Pin.pin -> unit
   end
 *)
+
 module Pwm :
   sig
-    val init_pin : Pin.pin -> unit
     val get_pwm_range : Pin.pin -> int
     val set_pwm_range : Pin.pin -> int -> unit
     val get_pulse_data : Pin.pin -> int
@@ -29,9 +29,8 @@ module Clock :
     val get_divisor : unit -> int
   end
 
+val init_pin        : ?divisor:int -> Pin.pin -> unit
 val get_frequency   : Pin.pin -> int
 val set_frequency   : Pin.pin -> int -> unit
 val get_pulse_width : Pin.pin -> float
 val set_pulse_width : Pin.pin -> float -> unit
-
-val test : unit -> unit
