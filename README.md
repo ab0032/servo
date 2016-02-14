@@ -11,7 +11,7 @@ This needs to be run as root to access /dev/mem to read and write to the Broadco
 The Raspberry Pi 2 has four pins, which can be used to output pwm signals for servos.
 Internally the BCM2835 only has two pwm channels, so only two independent pwm signals can be output concurrently.
 
-The two pwm channels can be run at different frequencies simultaniously.
+The two pwm channels can be run at different frequencies simultaneously.
 
 For advanced users: The two pwm channels share a clock divisor.
 This divisor can be changed from the user interface on initialization of a servo/pwm pin.
