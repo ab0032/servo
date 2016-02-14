@@ -13,7 +13,6 @@ type servo = {
 }
 
 let make
-      pin                        (* integer pin number to allocate and initialize *)
       ?(frequency = 50)          (* pwm frequency in Hz *)
       ?(speed = 0.3)             (* time it takes to turn 60 degrees in seconds *)
       ?(min_pulse_width = 0.5)   (* minimum allowed pulse width in ms *)
@@ -22,9 +21,10 @@ let make
       ?(min_angle = (-2.))         (* minimum possible angle in radians taken when min_pulse_width is used *)
                                  (* use +1 for min_angle if servo is not limited to 360 degrees *)
       ?(max_angle = 2.)          (* maximum possible angle in radians taken when max_pulse_width is applied *)
-      ()                         (* use -1 for max_angle if servo is not limited to 360 degrees *)
+                                 (* use -1 for max_angle if servo is not limited to 360 degrees *)
                                  (* standard servos should be at 0 degree with a pulse length of 1.5 ms,
                                     at plus 90 degree with 2ms pulses and at minus 90 with 1ms *)
+      pin                        (* integer pin number to allocate and initialize *)
   =
     let pin = Bcm2835.Pin.of_int pin in
     let _ = Bcm2835.init_pin pin in

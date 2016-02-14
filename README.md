@@ -23,10 +23,12 @@ so a change of the common divisor should normally not be necessary.
 
 Typical usage would look like this:
 
-    let servo = make 12 () in (* create a servo running at the default 50Hz frequency *)
+    let servo = Servo.make 12 in       (* create a servo running at the default 50Hz frequency connected to pin 12 *)
     begin
-      goto servo -1.          (* let the servo go to a certain angle given in radians *)
-      goto_relative servo 1.        (* make a relative move from the last position *)
+      Servo.goto servo (-1.);          (* let the servo go to a certain angle given in radians *)
+      Time.delay_microseconds(500000); (* give the servo some time to move *)
+      Servo.goto_relative servo 1.;    (* make a relative move from the last position *)
+      Time.delay_microseconds(500000); (* give the servo some time to move *)
     end
 
 The bcm pins 12, 13, 18 and 19 may be used. Pins 12 and 18 are on channel 0 and pins 13 and 19 on channel 1.

@@ -1,4 +1,14 @@
 
+let demo () =
+  let servo = Servo.make 12 in       (* create a servo running at the default 50Hz frequency connected to pin 12 *)
+  begin
+    Servo.goto servo (-1.);          (* let the servo go to a certain angle given in radians *)
+    Time.delay_microseconds(500000); (* give the servo some time to move *)
+    Servo.goto_relative servo 1.;    (* make a relative move from the last position *)
+    Time.delay_microseconds(500000); (* give the servo some time to move *)
+  end
+
+
 let test_delay () = (
   (* test delay_microseconds *)
   print_string "delay 1 sec ...\n";
@@ -50,8 +60,8 @@ open Servo ;;
 let test_servo () =
 
   (* use bcm pins 12 and 13 for demo *)
-  let servo_top    = make 12 () in
-  let servo_bottom = make 13 () in
+  let servo_top    = make 12 in
+  let servo_bottom = make 13 in
   begin
     let div = Bcm2835.Clock.get_divisor () in
     print_string ("got clock divisor: " ^ (string_of_int div) ^ "\n");
@@ -202,5 +212,7 @@ let test_bcm () = (
 test_delay () ;;
 test_mmap () ;;
 test_bcm () ;;
-*)
 test_servo () ;;
+*)
+
+demo () ;;

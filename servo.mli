@@ -13,13 +13,13 @@ type servo = {
 }
 
 val make :
-  int ->
   ?frequency:int ->
   ?speed:float ->
   ?min_pulse_width:float ->
   ?max_pulse_width:float ->
   ?zero_pulse_width:float ->
-  ?min_angle:float -> ?max_angle:float -> unit -> servo
+  ?min_angle:float -> ?max_angle:float ->
+  int -> servo
 
 val goto : servo -> float -> unit
 val goto_relative : servo -> float -> unit
