@@ -1,7 +1,8 @@
 # servo
 Servo control in OCaml for the Raspberry Pi 2 (BCM2836)
 
-This program is written for and tested on the Raspberry Pi 2.
+This program was written for and tested on the Raspberry Pi 2. Tests where done with ocamlc version 4.02.3 on a Raspberry Pi 2 running Ubuntu 14.04.3 LTS.
+
 It should also work on the Raspberry Pi after changing the base address of the BCM2835 in the file bcm2835.ml,
 but this is untested.
 
