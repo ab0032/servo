@@ -30,6 +30,8 @@ Typical usage would look like this:
       Time.delay_microseconds(500000); (* give the servo some time to move *)
       Servo.goto_relative servo 1.;    (* make a relative move from the last position *)
       Time.delay_microseconds(500000); (* give the servo some time to move *)
+      let angle = Servo.get_position servo in
+      print_string ("position of the servo is: " ^ (string_of_float angle) ^ "\n");
     end
 
 The bcm pins 12, 13, 18 and 19 may be used. Pins 12 and 18 are on channel 0 and pins 13 and 19 on channel 1.
